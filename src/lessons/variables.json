@@ -1,0 +1,43 @@
+{
+  "id": 1,
+  "title": "Variables & Types",
+  "difficulty": "easy",
+  "tasks": [
+    {
+      "id": 1,
+      "title": "String Type",
+      "description": "Annotate a string variable",
+      "code": "// : string tells TypeScript this variable holds text\nlet firstName: string = 'Alice';"
+    },
+    {
+      "id": 2,
+      "title": "Number & Boolean",
+      "description": "Annotate numeric and boolean values",
+      "code": "// Type annotations make your intentions clear\nlet age: number = 30;        // whole numbers\nlet isActive: boolean = true; // true or false"
+    },
+    {
+      "id": 3,
+      "title": "Type Inference",
+      "description": "Let TypeScript infer the type from the value",
+      "code": "// TypeScript infers 'string' from the assigned value\nlet message = 'Hello, world!';\n\n// Inferred as 'number' — no annotation needed\nlet count = 42;"
+    },
+    {
+      "id": 4,
+      "title": "Union Types",
+      "description": "Allow a variable to hold multiple types",
+      "code": "// | means 'or' — userId accepts strings OR numbers\nlet userId: string | number;\n\nuserId = 'abc123';  // a string is valid\nuserId = 42;         // a number is also valid"
+    },
+    {
+      "id": 5,
+      "title": "Type Alias",
+      "description": "Create a reusable name for a type",
+      "code": "// type creates a reusable alias — write it once, use everywhere\ntype ID = string | number;\n\nfunction lookup(id: ID): string {\n  return 'user_' + id;\n}"
+    },
+    {
+      "id": 6,
+      "title": "Literal Types",
+      "description": "Constrain a value to exact literals",
+      "code": "// The type is the exact value, not just 'string'\nlet direction: 'up' | 'down' | 'left' | 'right';\n\ndirection = 'up';         // OK — matches one of the literals\ndirection = 'diagonal';   // Error at compile time — not in the set"
+    }
+  ]
+}

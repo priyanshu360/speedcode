@@ -1,0 +1,43 @@
+{
+  "id": 3,
+  "title": "Functions",
+  "difficulty": "easy",
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Typed Parameters",
+      "description": "Add type annotations to function params",
+      "code": "// Each parameter has a type annotation after the colon\nfunction greet(name: string, age: number): void {\n  console.log(name + ' is ' + age);\n}"
+    },
+    {
+      "id": 2,
+      "title": "Return Types",
+      "description": "Annotate what the function returns",
+      "code": "// : number after the parens declares the return type\nfunction add(a: number, b: number): number {\n  return a + b;  // must return a number\n}\n\nconst sum = add(3, 4); // sum is inferred as number"
+    },
+    {
+      "id": 3,
+      "title": "Arrow Functions",
+      "description": "Write concise inline functions",
+      "code": "// Arrow functions with expression body have implicit return\nconst double = (x: number): number => x * 2;\n\n// With braces you need an explicit return statement\nconst triple = (x: number): number => {\n  return x * 3;\n};"
+    },
+    {
+      "id": 4,
+      "title": "Optional Parameters",
+      "description": "Make parameters optional with ?",
+      "code": "// Optional params (? ) must come after required ones\nfunction logMessage(msg: string, level?: string): void {\n  const prefix = level ?? 'INFO'; // ?? provides fallback\n  console.log('[' + prefix + '] ' + msg);\n}\n\nlogMessage('Hello');        // level is undefined, defaults to 'INFO'"
+    },
+    {
+      "id": 5,
+      "title": "Default Parameters",
+      "description": "Provide default values for parameters",
+      "code": "// Default values make the parameter implicitly optional\nfunction createUser(name: string, isAdmin: boolean = false) {\n  return { name, isAdmin };\n}\n\ncreateUser('Alice');       // isAdmin defaults to false\ncreateUser('Bob', true);   // isAdmin is explicitly true"
+    },
+    {
+      "id": 6,
+      "title": "Rest Parameters",
+      "description": "Collect remaining arguments into an array",
+      "code": "// ...nums gathers all extra arguments into an array\nfunction sum(...nums: number[]): number {\n  return nums.reduce((total, n) => total + n, 0);\n}\n\nconst total = sum(1, 2, 3, 4); // total is 10"
+    }
+  ]
+}

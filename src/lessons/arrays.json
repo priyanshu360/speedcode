@@ -1,0 +1,43 @@
+{
+  "id": 4,
+  "title": "Arrays & Iteration",
+  "difficulty": "easy",
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Typed Arrays",
+      "description": "Declare arrays with element types",
+      "code": "// T[] means 'array of T' — here T is number\nlet scores: number[] = [85, 92, 78];\n\n// Array<T> is the equivalent generic syntax\nlet names: Array<string> = ['Alice', 'Bob'];"
+    },
+    {
+      "id": 2,
+      "title": "for...of Loop",
+      "description": "Iterate directly over array elements",
+      "code": "// for...of gives you each element directly (not the index)\nconst fruits = ['Apple', 'Banana', 'Cherry'];\n\nfor (const fruit of fruits) {\n  console.log(fruit); // logs each fruit string\n}"
+    },
+    {
+      "id": 3,
+      "title": "Array.map",
+      "description": "Transform every element in an array",
+      "code": "// .map creates a new array with each element transformed\nconst numbers = [1, 2, 3, 4];\n\nconst doubled = numbers.map(n => n * 2);\n// doubled is [2, 4, 6, 8] — original stays unchanged"
+    },
+    {
+      "id": 4,
+      "title": "Array.filter",
+      "description": "Keep only elements that pass a test",
+      "code": "// .filter keeps elements where the callback returns true\nconst ages = [12, 18, 25, 30, 15];\n\nconst adults = ages.filter(age => age >= 18);\n// adults is [18, 25, 30] — minors are removed"
+    },
+    {
+      "id": 5,
+      "title": "Array.reduce",
+      "description": "Accumulate values into a single result",
+      "code": "// .reduce folds the array into one value\nconst prices = [10, 20, 30];\n\n// sum starts at 0, each price is added in sequence\nconst total = prices.reduce((sum, price) => sum + price, 0);\n// total is 60"
+    },
+    {
+      "id": 6,
+      "title": "Array.find",
+      "description": "Find the first element matching a condition",
+      "code": "// .find returns the first element where callback is true\nconst users = [\n  { id: 1, name: 'Alice' },\n  { id: 2, name: 'Bob' }\n];\n\nconst user = users.find(u => u.id === 2);\n// user is { id: 2, name: 'Bob' } — stops at first match"
+    }
+  ]
+}

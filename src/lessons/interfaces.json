@@ -1,0 +1,49 @@
+{
+  "id": 2,
+  "title": "Interfaces",
+  "difficulty": "easy",
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Define an Interface",
+      "description": "Declare the shape of an object",
+      "code": "// interface defines a contract for object shapes\ninterface User {\n  id: number;   // every user needs a unique id\n  name: string; // display name shown in the UI\n  email: string; // used for login and notifications\n}"
+    },
+    {
+      "id": 2,
+      "title": "Optional Properties",
+      "description": "Mark fields that may be absent",
+      "code": "// ? means the property is optional and may be undefined\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n  phone?: string;  // not everyone provides a phone number\n  bio?: string;     // short description — can be omitted\n}"
+    },
+    {
+      "id": 3,
+      "title": "Readonly Properties",
+      "description": "Prevent a property from being reassigned",
+      "code": "// readonly fields cannot be changed after object creation\ninterface User {\n  readonly id: number; // set once, never modified\n  name: string;\n  email: string;\n}"
+    },
+    {
+      "id": 4,
+      "title": "Interface with Methods",
+      "description": "Declare function signatures in an interface",
+      "code": "// Interfaces describe behavior too — not just data\ninterface User {\n  id: number;\n  name: string;\n  greet(): string;       // method signature — takes nothing, returns string\n  log(message: string): void; // method that returns nothing\n}"
+    },
+    {
+      "id": 5,
+      "title": "Implementing an Interface",
+      "description": "Create an object that satisfies the interface",
+      "code": "// The object literal must include ALL required properties\nconst user: User = {\n  id: 1,\n  name: 'Alice',\n  email: 'alice@example.com',\n  greet() { return 'Hello!'; },\n  log(msg) { console.log(msg); }\n};"
+    },
+    {
+      "id": 6,
+      "title": "Extending Interfaces",
+      "description": "Inherit properties from another interface",
+      "code": "// extends copies all User properties into Admin\ninterface Admin extends User {\n  role: 'admin' | 'superadmin'; // extra Admin-only property\n  manageUsers(): void;           // extra Admin-only method\n}"
+    },
+    {
+      "id": 7,
+      "title": "Interface with Index Signature",
+      "description": "Allow dynamic property keys",
+      "code": "// [key: string] means any string property name is accepted\ninterface Dictionary {\n  [key: string]: string; // all values must be strings too\n}\n\nconst translations: Dictionary = {\n  hello: 'bonjour',      // property name is dynamic\n  goodbye: 'au revoir'\n};"
+    }
+  ]
+}
