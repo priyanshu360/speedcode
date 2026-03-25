@@ -1,0 +1,43 @@
+{
+  "id": 6,
+  "title": "Async JavaScript",
+  "difficulty": "medium",
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Creating a Promise",
+      "description": "Wrap async work in a Promise",
+      "code": "// Promise<string> represents a future string value\nconst promise = new Promise<string>((resolve) => {\n  // resolve is called when the async work completes\n  resolve('Data loaded');\n});"
+    },
+    {
+      "id": 2,
+      "title": "Promise.then",
+      "description": "Handle a resolved promise with .then",
+      "code": "// .then receives the resolved value once it's available\nconst promise = Promise.resolve('Hello');\n\npromise.then((value: string) => {\n  console.log(value);        // 'Hello'\n  console.log(value.length); // 5 — fully typed as string\n});"
+    },
+    {
+      "id": 3,
+      "title": "Async Function",
+      "description": "Declare a function that returns a Promise",
+      "code": "// async makes the function ALWAYS return a Promise\nasync function fetchUser(id: number): Promise<string> {\n  // Simulate a network request\n  return 'User data for ' + id; // wrapped in Promise automatically\n}"
+    },
+    {
+      "id": 4,
+      "title": "Await",
+      "description": "Pause execution until a Promise resolves",
+      "code": "// await unpacks the Promise value (only works inside async functions)\nasync function loadData(): Promise<void> {\n  const data = await fetchUser(1);\n  // Execution pauses here until fetchUser resolves\n  console.log(data); // 'User data for 1'\n}"
+    },
+    {
+      "id": 5,
+      "title": "Async Error Handling",
+      "description": "Catch errors with try/catch in async code",
+      "code": "// try/catch works the same as in synchronous code\nasync function safeLoad(): Promise<void> {\n  try {\n    const data = await fetchUser(1);\n    console.log(data);\n  } catch (error) {\n    console.error('Failed to load:', error);\n  }\n}"
+    },
+    {
+      "id": 6,
+      "title": "Promise.all",
+      "description": "Run multiple promises in parallel",
+      "code": "// Promise.all waits for ALL promises — they run concurrently\nasync function loadAll(): Promise<void> {\n  const [user, posts] = await Promise.all([\n    fetchUser(1),\n    fetchPosts(1)\n  ]);\n  // Both requests happen in parallel — faster than sequential\n  console.log(user, posts);\n}"
+    }
+  ]
+}

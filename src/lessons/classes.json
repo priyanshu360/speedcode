@@ -1,0 +1,49 @@
+{
+  "id": 5,
+  "title": "Classes",
+  "difficulty": "medium",
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Basic Class",
+      "description": "Define a class with properties",
+      "code": "// A class bundles data (properties) and behavior (methods)\nclass Animal {\n  name: string;           // property declaration\n  constructor(name: string) {\n    this.name = name;     // assign the parameter to the property\n  }\n}"
+    },
+    {
+      "id": 2,
+      "title": "Parameter Properties",
+      "description": "Declare and assign in one step",
+      "code": "// public in the constructor auto-creates the property AND assigns it\nclass Animal {\n  constructor(public name: string) {} // no separate declaration needed\n}\n\nconst dog = new Animal('Dog');\nconsole.log(dog.name); // 'Dog'"
+    },
+    {
+      "id": 3,
+      "title": "Class Methods",
+      "description": "Add functions to a class",
+      "code": "// Methods are functions defined inside the class body\nclass Rectangle {\n  constructor(public width: number, public height: number) {}\n\n  area(): number {\n    return this.width * this.height;\n  }\n\n  perimeter(): number {\n    return 2 * (this.width + this.height);\n  }\n}"
+    },
+    {
+      "id": 4,
+      "title": "Access Modifiers",
+      "description": "Control visibility of members",
+      "code": "// public — accessible everywhere (this is the default)\n// private — only accessible inside THIS class\n// protected — accessible in this class and subclasses\nclass BankAccount {\n  public owner: string;\n  private balance: number;            // hidden from outside code\n  protected accountNumber: string;     // visible to child classes\n\n  constructor(owner: string, initial: number) {\n    this.owner = owner;\n    this.balance = initial;\n    this.accountNumber = 'ACC-' + Math.random();\n  }\n}"
+    },
+    {
+      "id": 5,
+      "title": "Getters and Setters",
+      "description": "Control property access with get/set",
+      "code": "// Getters compute values dynamically, setters validate on assignment\nclass Temperature {\n  constructor(private celsius: number) {}\n\n  get fahrenheit(): number {\n    return this.celsius * 9 / 5 + 32; // computed on access\n  }\n\n  set fahrenheit(value: number) {\n    this.celsius = (value - 32) * 5 / 9; // converts on assignment\n  }\n}"
+    },
+    {
+      "id": 6,
+      "title": "Inheritance",
+      "description": "Extend a class to reuse and specialize",
+      "code": "// extends creates a child class inheriting from the parent\nclass Vehicle {\n  constructor(public speed: number) {}\n  move(): void {\n    console.log('Moving at ' + this.speed);\n  }\n}\n\nclass Car extends Vehicle {\n  honk(): void {\n    console.log('Beep beep!'); // Car-specific behavior\n  }\n}"
+    },
+    {
+      "id": 7,
+      "title": "Method Override",
+      "description": "Replace a parent method in the child",
+      "code": "// Child classes can override parent methods with their own version\nclass Animal {\n  speak(): void {\n    console.log('Animal makes a sound');\n  }\n}\n\nclass Dog extends Animal {\n  speak(): void {\n    console.log('Woof!'); // replaces the parent speak()\n  }\n}"
+    }
+  ]
+}
