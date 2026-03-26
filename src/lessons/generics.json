@@ -1,0 +1,43 @@
+{
+  "id": 7,
+  "title": "Generics",
+  "difficulty": "hard",
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Generic Identity",
+      "description": "Capture the type with a type parameter",
+      "code": "// <T> captures whatever type is passed at the call site\nfunction identity<T>(value: T): T {\n  return value;\n}\n\nconst num = identity(42);      // T is inferred as number\nconst str = identity('hello'); // T is inferred as string"
+    },
+    {
+      "id": 2,
+      "title": "Generic Constraints",
+      "description": "Limit what types a generic accepts",
+      "code": "// extends constrains T to only types that have .length\nfunction longest<T extends { length: number }>(a: T, b: T): T {\n  return a.length >= b.length ? a : b;\n}\n\nlongest('cat', 'elephant'); // strings have length\nlongest([1, 2], [1, 2, 3]); // arrays have length too"
+    },
+    {
+      "id": 3,
+      "title": "Multiple Type Parameters",
+      "description": "Use more than one generic type",
+      "code": "// Multiple type parameters are separated by commas\nfunction pair<T, U>(first: T, second: U): [T, U] {\n  return [first, second];\n}\n\nconst result = pair('Alice', 30);\n// result is typed as [string, number]"
+    },
+    {
+      "id": 4,
+      "title": "Generic Interface",
+      "description": "Define an interface with type parameters",
+      "code": "// Box<T> wraps any value while preserving its type\ninterface Box<T> {\n  value: T;\n  get(): T;\n  set(value: T): void;\n}\n\nconst stringBox: Box<string> = {\n  value: 'hello',\n  get() { return this.value; },\n  set(v) { this.value = v; }\n};"
+    },
+    {
+      "id": 5,
+      "title": "Generic Class",
+      "description": "Build a reusable class with generics",
+      "code": "// Stack<T> works the same way for any element type\nclass Stack<T> {\n  private items: T[] = [];\n\n  push(item: T): void {\n    this.items.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.items.pop();\n  }\n\n  peek(): T | undefined {\n    return this.items[this.items.length - 1];\n  }\n}"
+    },
+    {
+      "id": 6,
+      "title": "Generic Utility Type",
+      "description": "Create a mapped type with generics",
+      "code": "// Recursively makes all properties readonly at every nesting level\ntype DeepReadonly<T> = {\n  readonly [K in keyof T]: T[K] extends object\n    ? DeepReadonly<T[K]>   // recurse into nested objects\n    : T[K];                 // leave primitives as-is\n};\n\ninterface Config {\n  name: string;\n  nested: { value: number };\n}\n\ntype Frozen = DeepReadonly<Config>;\n// Frozen: { readonly name: string; readonly nested: { readonly value: number } }"
+    }
+  ]
+}

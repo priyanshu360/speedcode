@@ -1,0 +1,43 @@
+{
+  "id": 8,
+  "title": "Utility Types",
+  "difficulty": "hard",
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Partial",
+      "description": "Make all properties optional",
+      "code": "// Partial<T> makes every property optional — great for updates\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nfunction updateUser(id: number, changes: Partial<User>): void {\n  console.log('Updating', id, 'with', changes);\n}\n\nupdateUser(1, { name: 'Alice' }); // only send the fields that changed"
+    },
+    {
+      "id": 2,
+      "title": "Pick",
+      "description": "Select specific properties from a type",
+      "code": "// Pick<T, K> creates a type with only the selected keys\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n  password: string;\n}\n\n// PublicProfile only has id and name — password is excluded\ntype PublicProfile = Pick<User, 'id' | 'name'>;\n\nconst profile: PublicProfile = { id: 1, name: 'Alice' };"
+    },
+    {
+      "id": 3,
+      "title": "Omit",
+      "description": "Remove specific properties from a type",
+      "code": "// Omit<T, K> is the inverse of Pick — it REMOVES keys\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n  password: string;\n}\n\n// SafeUser has everything EXCEPT password\ntype SafeUser = Omit<User, 'password'>;\n\nconst user: SafeUser = { id: 1, name: 'Alice', email: 'a@b.com' };"
+    },
+    {
+      "id": 4,
+      "title": "Record",
+      "description": "Create an object type with uniform values",
+      "code": "// Record<K, V> creates a type where each key K maps to a V\n// Useful for lookup tables and enum-like mappings\ntype Page = 'home' | 'about' | 'contact';\n\nconst routes: Record<Page, string> = {\n  home: '/',\n  about: '/about',\n  contact: '/contact'\n};"
+    },
+    {
+      "id": 5,
+      "title": "ReturnType",
+      "description": "Extract the return type of a function",
+      "code": "// ReturnType<T> extracts what a function type returns\nfunction createUser() {\n  return { id: 1, name: 'Alice' };\n}\n\n// UserType is { id: number; name: string } — the return shape\ntype UserType = ReturnType<typeof createUser>;\n\nconst user: UserType = { id: 2, name: 'Bob' };"
+    },
+    {
+      "id": 6,
+      "title": "Awaited",
+      "description": "Extract the type from a Promise",
+      "code": "// Awaited<T> unwraps Promise types to get the inner type\nasync function fetchData(): Promise<string[]> {\n  return ['a', 'b', 'c'];\n}\n\n// DataType is string[] — the Promise wrapper is stripped away\ntype DataType = Awaited<ReturnType<typeof fetchData>>;\n\ntype AlsoString = Awaited<Promise<string>>; // also string"
+    }
+  ]
+}
