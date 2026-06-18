@@ -9,6 +9,7 @@ let runner: LessonRunner;
 let text: string;
 let lines: string[];
 let revealedLines: number;
+const completedTaskRenders: string[] = [];
 
 function visibleLength(): number {
   return lines.slice(0, revealedLines).join('\n').length;
@@ -21,14 +22,40 @@ function revealMore(): void {
   }
 }
 
+function captureCompletedTask(): string {
+  const task = runner.currentTask;
+  if (!task) return '';
+  const game = runner.game;
+  const out: string[] = [];
+  const code = task.code;
+
+  out.push(`\x1b[90m${'─'.repeat(50)}\x1b[0m\n`);
+  out.push(`\x1b[1m\u2714 Task ${runner.lesson.tasks.indexOf(task) + 1}: ${task.title}\x1b[0m`);
+  out.push(`  \x1b[90m${game.getScore().toString()}\x1b[0m\n`);
+  for (const ch of code) {
+    out.push('\x1b[32m');
+    out.push(ch);
+  }
+  out.push('\x1b[0m');
+  return out.join('');
+}
+
 function render(): void {
   const output: string[] = [];
-
   output.push('\x1b[2J\x1b[H');
+
+  output.push(`\x1b[1m${runner.lesson.title}\x1b[0m`);
+  output.push(`  \x1b[36m${runner.progress}\x1b[0m`);
+  output.push(`  \x1b[33m[${runner.lesson.difficulty}]\x1b[0m\n`);
+
+  for (const cr of completedTaskRenders) {
+    output.push(cr);
+    output.push('\n');
+  }
 
   if (runner.isLessonComplete) {
     const score = runner.lessonScore;
-    output.push(`\x1b[1m${runner.lesson.title}\x1b[0m — \x1b[32mLesson Complete!\x1b[0m\n`);
+    output.push(`\n\x1b[32mLesson Complete!\x1b[0m\n`);
     if (score) {
       output.push(`\nAverage: ${score.toString()}\n`);
     }
@@ -40,9 +67,10 @@ function render(): void {
   const task = runner.currentTask!;
   const game = runner.game;
 
-  output.push(`\x1b[1m${runner.lesson.title}\x1b[0m`);
-  output.push(`  \x1b[36m${runner.progress}\x1b[0m`);
-  output.push(`  \x1b[33m[${runner.lesson.difficulty}]\x1b[0m\n`);
+  if (completedTaskRenders.length > 0) {
+    output.push(`\x1b[90m${'─'.repeat(50)}\x1b[0m\n\n`);
+  }
+
   output.push(`\x1b[90m${task.description}\x1b[0m\n\n`);
 
   if (game.state === GameState.COMPLETED) {
@@ -77,7 +105,7 @@ function render(): void {
     } else {
       output.push('\x1b[37m');
     }
-    output.push(text[i]!);
+    output.push(text.charAt(i));
     output.push('\x1b[0m');
   }
 
@@ -85,7 +113,11 @@ function render(): void {
     output.push(`\x1b[90m\n\n... ${lines.length - revealedLines} more lines ...\x1b[0m`);
   }
 
-  output.push(`\n\nCharacters: ${typed.length}/${text.length}`);
+  const liveWpm = game.getCurrentWPM();
+  const liveAcc = game.getCurrentAccuracy();
+  output.push(
+    `\n\n\x1b[36m\u25b6 ${liveWpm.toFixed(1)} WPM\x1b[0m  \xb7  \x1b[32m${liveAcc.toFixed(1)}% accuracy\x1b[0m  \xb7  ${typed.length}/${text.length} chars`,
+  );
   process.stdout.write(output.join(''));
 }
 
@@ -109,15 +141,14 @@ function onKeypress(chunk: Buffer): void {
 
   if (game.state === GameState.COMPLETED) {
     if (byte === 0x0d || byte === 0x0a) {
+      completedTaskRenders.push(captureCompletedTask());
       const hasMore = runner.advance();
       if (hasMore) {
         text = runner.currentTask!.code;
         lines = text.split('\n');
         revealedLines = Math.min(20, lines.length);
-        render();
-      } else {
-        render();
       }
+      render();
     }
     return;
   }

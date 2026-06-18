@@ -60,6 +60,22 @@ export class Game {
     return this.session.getAccuracy();
   }
 
+  getCurrentWPM(): number {
+    if (this.state !== GameState.IN_PROGRESS) {
+      return 0;
+    }
+    const elapsed = Date.now() - this.startTime;
+    const timeInMinutes = elapsed / (1000 * 60);
+    if (timeInMinutes <= 0) {
+      return 0;
+    }
+    return this.session.typedText.length / 5 / timeInMinutes;
+  }
+
+  getCurrentAccuracy(): number {
+    return this.session.getAccuracy();
+  }
+
   getScore(): Score {
     return new Score(this.calculateWPM(), this.calculateAccuracy());
   }
