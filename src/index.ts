@@ -2,6 +2,7 @@ import process from 'node:process';
 import { TextGenerator } from './generator.js';
 import { LessonRunner } from './lesson.js';
 import { Difficulty, GameState } from './types.js';
+import { SyntaxColor, computeSyntaxColors } from './syntax.js';
 
 const generator = new TextGenerator('src/lessons');
 
@@ -9,6 +10,7 @@ let runner: LessonRunner;
 let text: string;
 let lines: string[];
 let revealedLines: number;
+let syntaxColors: string[] = [];
 const completedTaskRenders: string[] = [];
 
 function visibleLength(): number {
@@ -32,11 +34,11 @@ function captureCompletedTask(): string {
   out.push(`\x1b[90m${'─'.repeat(50)}\x1b[0m\n`);
   out.push(`\x1b[1m\u2714 Task ${runner.lesson.tasks.indexOf(task) + 1}: ${task.title}\x1b[0m`);
   out.push(`  \x1b[90m${game.getScore().toString()}\x1b[0m\n`);
-  for (const ch of code) {
-    out.push('\x1b[32m');
-    out.push(ch);
+  for (let i = 0; i < code.length; i++) {
+    out.push(syntaxColors[i] ?? SyntaxColor.PLAIN);
+    out.push(code[i]!);
   }
-  out.push('\x1b[0m');
+  out.push(SyntaxColor.RESET);
   return out.join('');
 }
 
@@ -74,11 +76,11 @@ function render(): void {
   output.push(`\x1b[90m${task.description}\x1b[0m\n\n`);
 
   if (game.state === GameState.COMPLETED) {
-    for (const ch of text) {
-      output.push('\x1b[32m');
-      output.push(ch);
+    for (let i = 0; i < text.length; i++) {
+      output.push(syntaxColors[i] ?? SyntaxColor.PLAIN);
+      output.push(text[i]!);
     }
-    output.push('\x1b[0m');
+    output.push(SyntaxColor.RESET);
     output.push(`\n\n\x1b[32m\u2714 Complete!\x1b[0m  ${game.getScore().toString()}`);
     const remaining = runner.lesson.tasks.length - runner.lesson.tasks.indexOf(task) - 1;
     if (remaining > 0) {
@@ -94,19 +96,22 @@ function render(): void {
   const end = visibleLength();
 
   for (let i = 0; i < end; i++) {
+    const color = syntaxColors[i] ?? SyntaxColor.PLAIN;
     if (i < typed.length) {
       if (typed[i] === text[i]) {
-        output.push('\x1b[32m');
+        output.push(color);
       } else {
         output.push('\x1b[41m\x1b[37m');
       }
     } else if (i === typed.length) {
+      output.push(color);
       output.push('\x1b[7m');
     } else {
-      output.push('\x1b[37m');
+      output.push(color);
+      output.push('\x1b[2m');
     }
     output.push(text.charAt(i));
-    output.push('\x1b[0m');
+    output.push(SyntaxColor.RESET);
   }
 
   if (revealedLines < lines.length) {
@@ -145,6 +150,7 @@ function onKeypress(chunk: Buffer): void {
       const hasMore = runner.advance();
       if (hasMore) {
         text = runner.currentTask!.code;
+        syntaxColors = computeSyntaxColors(text);
         lines = text.split('\n');
         revealedLines = Math.min(20, lines.length);
       }
@@ -240,6 +246,7 @@ function main() {
 
   runner = new LessonRunner(lesson);
   text = runner.currentTask!.code;
+  syntaxColors = computeSyntaxColors(text);
   lines = text.split('\n');
   revealedLines = Math.min(20, lines.length);
   runner.startCurrentTask();
