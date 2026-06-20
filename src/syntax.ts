@@ -99,69 +99,27 @@ const BUILTINS = new Set([
   'Math',
 ]);
 
-function fill(arr: string[], from: number, to: number, val: string): void {
-  for (let i = from; i < to && i < arr.length; i++) {
-    arr[i] = val;
-  }
-}
+const TOKEN_RE = /(`[^`\\]*(?:\\.[^`\\]*)*`|"[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*')|(\b0[xX][0-9a-fA-F]+\b|\b\d+\.?\d*\b)|([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
 
 export function computeSyntaxColors(code: string): string[] {
   const colors = new Array<string>(code.length).fill(SyntaxColor.PLAIN);
+  let match: RegExpExecArray | null;
 
-  let i = 0;
-  while (i < code.length) {
-    if (code[i] === '"' || code[i] === "'") {
-      const quote = code[i];
-      let j = i + 1;
-      while (j < code.length && code[j] !== quote) {
-        if (code[j] === '\\') j++;
-        j++;
-      }
-      fill(colors, i, Math.min(j + 1, code.length), SyntaxColor.STRING);
-      i = j + 1;
-      continue;
-    }
+  while ((match = TOKEN_RE.exec(code)) !== null) {
+    const [full, str, num, word] = match;
+    const start = match.index;
+    const end = start + full.length;
+    let color: string;
 
-    if (code[i] === '`') {
-      let j = i + 1;
-      while (j < code.length && code[j] !== '`') {
-        if (code[j] === '\\') j++;
-        j++;
-      }
-      fill(colors, i, Math.min(j + 1, code.length), SyntaxColor.STRING);
-      i = j + 1;
-      continue;
-    }
+    if (str) color = SyntaxColor.STRING;
+    else if (num) color = SyntaxColor.NUMBER;
+    else if (word) color = KEYWORDS.has(word) ? SyntaxColor.KEYWORD
+      : TYPE_KW.has(word) ? SyntaxColor.TYPE
+        : BUILTINS.has(word) ? SyntaxColor.BUILTIN
+          : SyntaxColor.PLAIN;
+    else continue;
 
-    if (/[0-9]/.test(code.charAt(i)) || (code[i] === '.' && /[0-9]/.test(code.charAt(i + 1)))) {
-      let j = i;
-      if (code[i] === '0' && (code[i + 1] === 'x' || code[i + 1] === 'X')) {
-        j += 2;
-        while (j < code.length && /[0-9a-fA-F]/.test(code.charAt(j))) j++;
-      } else {
-        while (j < code.length && /[0-9.]/.test(code.charAt(j))) j++;
-      }
-      fill(colors, i, j, SyntaxColor.NUMBER);
-      i = j;
-      continue;
-    }
-
-    if (/[a-zA-Z_$]/.test(code.charAt(i))) {
-      let j = i;
-      while (j < code.length && /[a-zA-Z0-9_$]/.test(code.charAt(j))) j++;
-      const word = code.slice(i, j);
-      if (TYPE_KW.has(word)) {
-        fill(colors, i, j, SyntaxColor.TYPE);
-      } else if (KEYWORDS.has(word)) {
-        fill(colors, i, j, SyntaxColor.KEYWORD);
-      } else if (BUILTINS.has(word)) {
-        fill(colors, i, j, SyntaxColor.BUILTIN);
-      }
-      i = j;
-      continue;
-    }
-
-    i++;
+    colors.fill(color, start, end);
   }
 
   return colors;

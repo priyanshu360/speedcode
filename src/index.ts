@@ -1,7 +1,9 @@
 import process from 'node:process';
+import readline from 'node:readline';
 import { TextGenerator } from './generator.js';
 import { LessonRunner } from './lesson.js';
 import { Difficulty, GameState } from './types.js';
+import type { Lesson } from './types.js';
 import { SyntaxColor, computeSyntaxColors } from './syntax.js';
 
 const generator = new TextGenerator('src/lessons');
@@ -198,7 +200,38 @@ Examples:
 `;
 }
 
-function main() {
+function showMenu(): Promise<Lesson> {
+  const lessons = generator.getAllLessonsOrdered();
+
+  console.log('\n\x1b[1mSelect a lesson:\x1b[0m\n');
+  for (let i = 0; i < lessons.length; i++) {
+    const l = lessons[i];
+    if (!l) continue;
+    const color = l.difficulty === Difficulty.EASY ? '\x1b[32m' : l.difficulty === Difficulty.MEDIUM ? '\x1b[33m' : '\x1b[31m';
+    console.log(`  \x1b[36m${i + 1}.\x1b[0m ${l.title}  ${color}[${l.difficulty}]\x1b[0m`);
+  }
+  console.log(`  \x1b[36m0.\x1b[0m Exit\n`);
+
+  return new Promise<Lesson>((resolve) => {
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    rl.question('\x1b[90mEnter lesson number:\x1b[0m ', (answer) => {
+      rl.close();
+      const num = parseInt(answer.trim(), 10);
+      if (isNaN(num) || num < 1 || num > lessons.length) {
+        console.log('Exiting.');
+        process.exit(0);
+      }
+      const chosen = lessons[num - 1];
+      if (!chosen) {
+        console.log('Exiting.');
+        process.exit(0);
+      }
+      resolve(chosen);
+    });
+  });
+}
+
+async function main() {
   const args = process.argv.slice(2);
   let lessonName: string | undefined;
   let difficulty: Difficulty | undefined;
@@ -217,12 +250,6 @@ function main() {
     }
   }
 
-  if (!lessonName && !difficulty) {
-    console.error('Error: provide either --lesson or --difficulty\n');
-    console.error(usage());
-    process.exit(1);
-  }
-
   let lesson;
   if (lessonName) {
     lesson = generator.getLessonByTitle(lessonName);
@@ -235,13 +262,15 @@ function main() {
       console.error(usage());
       process.exit(1);
     }
-  } else {
+  } else if (difficulty) {
     lesson = generator.getRandomLesson(difficulty);
     if (!lesson) {
-      console.error(`Error: no lessons found for difficulty "${String(difficulty)}".\n`);
+      console.error(`Error: no lessons found for difficulty "${difficulty}".\n`);
       console.error(usage());
       process.exit(1);
     }
+  } else {
+    lesson = await showMenu();
   }
 
   runner = new LessonRunner(lesson);
@@ -262,10 +291,8 @@ function main() {
   process.stdin.on('data', onKeypress);
 }
 
-try {
-  main();
-} catch (err) {
+main().catch((err: unknown) => {
   cleanup();
   console.error(err);
   process.exit(1);
-}
+});

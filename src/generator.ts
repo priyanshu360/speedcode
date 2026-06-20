@@ -33,4 +33,16 @@ export class TextGenerator {
     if (filtered.length === 0) return undefined;
     return filtered[Math.floor(Math.random() * filtered.length)];
   }
+
+  getAllLessonsOrdered(): Lesson[] {
+    const order: Record<string, number> = {
+      [Difficulty.EASY]: 0,
+      [Difficulty.MEDIUM]: 1,
+      [Difficulty.HARD]: 2,
+    };
+    return [...this.lessons].sort((a, b) => {
+      const d = (order[a.difficulty] ?? 0) - (order[b.difficulty] ?? 0);
+      return d !== 0 ? d : a.id - b.id;
+    });
+  }
 }
