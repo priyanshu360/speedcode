@@ -1,4 +1,5 @@
 export const SyntaxColor = {
+  COMMENT: '\x1b[90m',
   PLAIN: '\x1b[37m',
   KEYWORD: '\x1b[94m',
   STRING: '\x1b[32m',
@@ -99,19 +100,20 @@ const BUILTINS = new Set([
   'Math',
 ]);
 
-const TOKEN_RE = /(`[^`\\]*(?:\\.[^`\\]*)*`|"[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*')|(\b0[xX][0-9a-fA-F]+\b|\b\d+\.?\d*\b)|([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
+const TOKEN_RE = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|(`[^`\\]*(?:\\.[^`\\]*)*`|"[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*')|(\b0[xX][0-9a-fA-F]+\b|\b\d+\.?\d*\b)|([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
 
 export function computeSyntaxColors(code: string): string[] {
   const colors = new Array<string>(code.length).fill(SyntaxColor.PLAIN);
   let match: RegExpExecArray | null;
 
   while ((match = TOKEN_RE.exec(code)) !== null) {
-    const [full, str, num, word] = match;
+    const [full, comment, str, num, word] = match;
     const start = match.index;
     const end = start + full.length;
     let color: string;
 
-    if (str) color = SyntaxColor.STRING;
+    if (comment) color = SyntaxColor.COMMENT;  // add this to SyntaxColor
+    else if (str) color = SyntaxColor.STRING;
     else if (num) color = SyntaxColor.NUMBER;
     else if (word) color = KEYWORDS.has(word) ? SyntaxColor.KEYWORD
       : TYPE_KW.has(word) ? SyntaxColor.TYPE
