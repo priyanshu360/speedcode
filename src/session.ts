@@ -1,5 +1,5 @@
 export class TypingSession {
-  typedText: string = '';
+  typedText = '';
   targetText: string;
 
   constructor(text: string) {

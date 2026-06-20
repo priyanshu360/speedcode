@@ -13,7 +13,7 @@
       "id": 2,
       "title": "Promise.then",
       "description": "Handle a resolved promise with .then",
-      "code": "// .then receives the resolved value once it's available\nconst promise = Promise.resolve('Hello');\n\npromise.then((value: string) => {\n  console.log(value);        // 'Hello'\n  console.log(value.length); // 5 — fully typed as string\n});"
+      "code": "// .then receives the resolved value once it's available\nconst promise = Promise.resolve('Hello');\n\npromise.then((value: string) => {\n  console.log(value);        // 'Hello'\n  console.log(value.length); // 5 -- fully typed as string\n});"
     },
     {
       "id": 3,
@@ -37,7 +37,7 @@
       "id": 6,
       "title": "Promise.all",
       "description": "Run multiple promises in parallel",
-      "code": "// Promise.all waits for ALL promises — they run concurrently\nasync function loadAll(): Promise<void> {\n  const [user, posts] = await Promise.all([\n    fetchUser(1),\n    fetchPosts(1)\n  ]);\n  // Both requests happen in parallel — faster than sequential\n  console.log(user, posts);\n}"
+      "code": "// Promise.all waits for ALL promises -- they run concurrently\nasync function loadAll(): Promise<void> {\n  const [user, posts] = await Promise.all([\n    fetchUser(1),\n    fetchPosts(1)\n  ]);\n  // Both requests happen in parallel -- faster than sequential\n  console.log(user, posts);\n}"
     }
   ]
 }

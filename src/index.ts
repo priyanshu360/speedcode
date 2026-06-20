@@ -36,7 +36,7 @@ function captureCompletedTask(): string {
   out.push(`  \x1b[90m${game.getScore().toString()}\x1b[0m\n`);
   for (let i = 0; i < code.length; i++) {
     out.push(syntaxColors[i] ?? SyntaxColor.PLAIN);
-    out.push(code[i]!);
+    out.push(code.charAt(i));
   }
   out.push(SyntaxColor.RESET);
   return out.join('');
@@ -66,7 +66,7 @@ function render(): void {
     return;
   }
 
-  const task = runner.currentTask!;
+  const task = runner.currentTask as Exclude<typeof runner.currentTask, undefined>;
   const game = runner.game;
 
   if (completedTaskRenders.length > 0) {
@@ -78,7 +78,7 @@ function render(): void {
   if (game.state === GameState.COMPLETED) {
     for (let i = 0; i < text.length; i++) {
       output.push(syntaxColors[i] ?? SyntaxColor.PLAIN);
-      output.push(text[i]!);
+      output.push(text.charAt(i));
     }
     output.push(SyntaxColor.RESET);
     output.push(`\n\n\x1b[32m\u2714 Complete!\x1b[0m  ${game.getScore().toString()}`);
@@ -108,7 +108,7 @@ function render(): void {
       output.push('\x1b[7m');
     } else {
       output.push(color);
-      output.push('\x1b[2m');
+      output.push(SyntaxColor.PLAIN);
     }
     output.push(text.charAt(i));
     output.push(SyntaxColor.RESET);
@@ -149,7 +149,7 @@ function onKeypress(chunk: Buffer): void {
       completedTaskRenders.push(captureCompletedTask());
       const hasMore = runner.advance();
       if (hasMore) {
-        text = runner.currentTask!.code;
+        text = (runner.currentTask as Exclude<typeof runner.currentTask, undefined>).code;
         syntaxColors = computeSyntaxColors(text);
         lines = text.split('\n');
         revealedLines = Math.min(20, lines.length);
@@ -207,8 +207,8 @@ function main() {
     if (args[i] === '--lesson' && i + 1 < args.length) {
       lessonName = args[++i];
     } else if (args[i] === '--difficulty' && i + 1 < args.length) {
-      const val = args[++i];
-      if (val !== Difficulty.EASY && val !== Difficulty.MEDIUM && val !== Difficulty.HARD) {
+      const val = args[++i] as string;
+      if (val !== 'easy' && val !== 'medium' && val !== 'hard') {
         console.error(`Error: invalid difficulty "${val}". Must be easy, medium, or hard.\n`);
         console.error(usage());
         process.exit(1);
@@ -238,14 +238,14 @@ function main() {
   } else {
     lesson = generator.getRandomLesson(difficulty);
     if (!lesson) {
-      console.error(`Error: no lessons found for difficulty "${difficulty}".\n`);
+      console.error(`Error: no lessons found for difficulty "${String(difficulty)}".\n`);
       console.error(usage());
       process.exit(1);
     }
   }
 
   runner = new LessonRunner(lesson);
-  text = runner.currentTask!.code;
+  text = (runner.currentTask as Exclude<typeof runner.currentTask, undefined>).code;
   syntaxColors = computeSyntaxColors(text);
   lines = text.split('\n');
   revealedLines = Math.min(20, lines.length);

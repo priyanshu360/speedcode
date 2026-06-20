@@ -31,6 +31,6 @@ export class TextGenerator {
   getRandomLesson(difficulty?: Difficulty): Lesson | undefined {
     const filtered = difficulty ? this.lessons.filter((l) => l.difficulty === difficulty) : this.lessons;
     if (filtered.length === 0) return undefined;
-    return filtered[Math.floor(Math.random() * filtered.length)]!;
+    return filtered[Math.floor(Math.random() * filtered.length)];
   }
 }

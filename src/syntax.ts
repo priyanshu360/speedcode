@@ -3,7 +3,6 @@ export const SyntaxColor = {
   KEYWORD: '\x1b[94m',
   STRING: '\x1b[32m',
   NUMBER: '\x1b[33m',
-  COMMENT: '\x1b[90m',
   TYPE: '\x1b[36m',
   BUILTIN: '\x1b[95m',
   RESET: '\x1b[0m',

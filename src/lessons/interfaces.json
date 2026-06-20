@@ -13,7 +13,7 @@
       "id": 2,
       "title": "Optional Properties",
       "description": "Mark fields that may be absent",
-      "code": "// ? means the property is optional and may be undefined\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n  phone?: string;  // not everyone provides a phone number\n  bio?: string;     // short description — can be omitted\n}"
+      "code": "// ? means the property is optional and may be undefined\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n  phone?: string;  // not everyone provides a phone number\n  bio?: string;     // short description -- can be omitted\n}"
     },
     {
       "id": 3,
@@ -25,7 +25,7 @@
       "id": 4,
       "title": "Interface with Methods",
       "description": "Declare function signatures in an interface",
-      "code": "// Interfaces describe behavior too — not just data\ninterface User {\n  id: number;\n  name: string;\n  greet(): string;       // method signature — takes nothing, returns string\n  log(message: string): void; // method that returns nothing\n}"
+      "code": "// Interfaces describe behavior too -- not just data\ninterface User {\n  id: number;\n  name: string;\n  greet(): string;       // method signature -- takes nothing, returns string\n  log(message: string): void; // method that returns nothing\n}"
     },
     {
       "id": 5,

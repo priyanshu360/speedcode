@@ -4,7 +4,7 @@ import type { Lesson, Task } from './types.js';
 
 export class LessonRunner {
   private tasks: Task[];
-  private currentTaskIndex: number = 0;
+  private currentTaskIndex = 0;
   private currentGame: Game | null = null;
   private taskScores: Score[] = [];
 
@@ -44,7 +44,7 @@ export class LessonRunner {
   }
 
   finishCurrentTask(): void {
-    if (this.currentGame && this.currentGame.state === GameState.COMPLETED) {
+    if (this.currentGame?.state === GameState.COMPLETED) {
       this.taskScores.push(this.currentGame.getScore());
     }
   }

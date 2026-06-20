@@ -2,8 +2,8 @@ import { GameState, Score } from './types.js';
 import { TypingSession } from './session.js';
 
 export class Game {
-  private startTime: number = 0;
-  private endTime: number = 0;
+  private startTime = 0;
+  private endTime = 0;
   readonly session: TypingSession;
   state: GameState;
 

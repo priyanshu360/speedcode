@@ -25,7 +25,7 @@
       "id": 4,
       "title": "Access Modifiers",
       "description": "Control visibility of members",
-      "code": "// public — accessible everywhere (this is the default)\n// private — only accessible inside THIS class\n// protected — accessible in this class and subclasses\nclass BankAccount {\n  public owner: string;\n  private balance: number;            // hidden from outside code\n  protected accountNumber: string;     // visible to child classes\n\n  constructor(owner: string, initial: number) {\n    this.owner = owner;\n    this.balance = initial;\n    this.accountNumber = 'ACC-' + Math.random();\n  }\n}"
+      "code": "// public -- accessible everywhere (this is the default)\n// private -- only accessible inside THIS class\n// protected -- accessible in this class and subclasses\nclass BankAccount {\n  public owner: string;\n  private balance: number;            // hidden from outside code\n  protected accountNumber: string;     // visible to child classes\n\n  constructor(owner: string, initial: number) {\n    this.owner = owner;\n    this.balance = initial;\n    this.accountNumber = 'ACC-' + Math.random();\n  }\n}"
     },
     {
       "id": 5,
