@@ -1,6 +1,6 @@
 # speedcode
 
-A terminal typing tutor that teaches TypeScript through progressive lessons. Type real code with inline comments that explain each concept as you go.
+A terminal typing tutor that teaches TypeScript through progressive lessons. Type real code with syntax highlighting, live stats, and auto-scrolling — all in your terminal.
 
 ## Install
 
@@ -13,14 +13,41 @@ npm install
 ## Usage
 
 ```bash
+# Interactive lesson menu (no args)
+npm run dev
+
 # Pick a lesson by name
 npm run dev -- --lesson interfaces
 
-# Filter by difficulty (easy | medium | hard)
+# Random lesson by difficulty
 npm run dev -- --difficulty easy
+```
 
-# Partial names work too
-npm run dev -- --lesson async
+### Controls
+
+| Key | Action |
+|-----|--------|
+| Type | Enter characters (code to match the task) |
+| Backspace | Delete last character |
+| Tab | Insert 2 spaces |
+| Enter | Newline / confirm task complete |
+| Ctrl+C | Exit |
+
+### Features
+
+- **Syntax highlighting** — keywords, strings, numbers, types, and builtins colored as you type
+- **Live stats** — real-time WPM and accuracy shown at the bottom of the screen
+- **Task accumulation** — completed tasks remain visible below the current one
+- **Auto-scroll** — viewport advances as you reach the bottom
+- **Interactive menu** — numbered lesson picker when no `--lesson` or `--difficulty` is provided
+
+## Scripts
+
+```bash
+npm run dev      # Run the typing tutor
+npm run lint     # ESLint check
+npm run format   # Prettier format
+npm run typecheck # tsc --noEmit
 ```
 
 ## Lessons
